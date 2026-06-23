@@ -3,7 +3,7 @@ import '../../core/imports/packages_imports.dart';
 
 import '../auth/providers/auth_provider.dart';
 import '../auth/providers/session_provider.dart';
-import 'tabs/home_tab.dart';
+import '../home/home_tab.dart';
 import 'tabs/leaderboard_tab.dart';
 import 'tabs/profile_tab.dart';
 

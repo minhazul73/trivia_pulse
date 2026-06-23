@@ -1,7 +1,7 @@
 import '../../../core/imports/core_imports.dart';
 import '../../../core/imports/packages_imports.dart';
 
-import '../../../data/repositories/auth_repository.dart';
+import '../../../data/repositories/auth/auth_repository.dart';
 
 class AuthProvider extends ChangeNotifier {
   final AuthRepository _repository;

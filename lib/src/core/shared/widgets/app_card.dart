@@ -18,8 +18,8 @@ import '../../imports/imports.dart';
 class AppCard extends StatelessWidget {
   const AppCard({
     super.key,
-    required this.child,
-    this.title,
+    this.child,
+    required this.title,
     this.subtitle,
     this.leading,
     this.trailing,
@@ -30,8 +30,8 @@ class AppCard extends StatelessWidget {
     this.color,
   });
 
-  final Widget child;
-  final String? title;
+  final Widget? child;
+  final String title;
   final String? subtitle;
   final Widget? leading;
   final Widget? trailing;
@@ -54,49 +54,48 @@ class AppCard extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (title != null || leading != null || trailing != null)
-          Padding(
-            padding: EdgeInsets.only(
-              left: AppSpacing.md,
-              right: AppSpacing.md,
-              top: AppSpacing.md,
-              bottom: AppSpacing.sm,
-            ),
-            child: Row(
-              children: [
-                if (leading != null) ...[leading!, SizedBox(width: 12.w)],
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (title != null)
-                        Text(
-                          title!,
-                          style: tt.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      if (subtitle != null)
-                        Text(
-                          subtitle!,
-                          style: tt.bodySmall?.copyWith(
-                            color: cs.onSurfaceVariant,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                if (trailing != null) trailing!,
-              ],
-            ),
-          ),
         Padding(
-          padding: padding ??
+          padding: EdgeInsets.only(
+            left: AppSpacing.md,
+            right: AppSpacing.md,
+            top: AppSpacing.md,
+            bottom: AppSpacing.md,
+          ),
+          child: Row(
+            children: [
+              if (leading != null) ...[leading!, SizedBox(width: 12.w)],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: tt.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    if (subtitle != null)
+                      Text(
+                        subtitle!,
+                        style: tt.bodySmall?.copyWith(
+                          color: cs.onSurfaceVariant,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              ?trailing,
+            ],
+          ),
+        ),
+        Padding(
+          padding:
+              padding ??
               EdgeInsets.fromLTRB(
                 AppSpacing.md,
-                title == null ? AppSpacing.md : 0,
+                0,
                 AppSpacing.md,
-                AppSpacing.md,
+                child != null ? AppSpacing.md : 0,
               ),
           child: child,
         ),
@@ -115,11 +114,7 @@ class AppCard extends StatelessWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: onTap != null
-          ? InkWell(
-              onTap: onTap,
-              borderRadius: AppBorders.card,
-              child: content,
-            )
+          ? InkWell(onTap: onTap, borderRadius: AppBorders.card, child: content)
           : content,
     );
   }

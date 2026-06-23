@@ -1,7 +1,7 @@
-import '../../core/imports/core_imports.dart';
-import '../../core/imports/packages_imports.dart';
+import '../../../core/imports/core_imports.dart';
+import '../../../core/imports/packages_imports.dart';
 
-import '../models/user_model.dart';
+import '../../models/user_model.dart';
 import 'auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {

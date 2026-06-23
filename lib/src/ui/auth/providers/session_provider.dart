@@ -1,7 +1,7 @@
 import 'dart:async';
 import '../../../core/imports/imports.dart';
 import '../../../data/models/user_model.dart';
-import '../../../data/repositories/auth_repository.dart';
+import '../../../data/repositories/auth/auth_repository.dart';
 
 enum SessionStatus { unknown, authenticated, unauthenticated }
 

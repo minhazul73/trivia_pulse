@@ -1,5 +1,5 @@
-import '../../core/utils/utils.dart';
-import '../models/user_model.dart';
+import '../../../core/utils/utils.dart';
+import '../../models/user_model.dart';
 
 abstract class AuthRepository {
   /// Stream of auth state changes. Emits AppUser when authenticated, null when not.
