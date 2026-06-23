@@ -6,9 +6,8 @@ import '../../ui/auth/login_screen.dart';
 import '../../ui/auth/signup_screen.dart';
 import '../../ui/auth/forgot_password_screen.dart';
 
-import '../../ui/home/home_page.dart';
+import '../../ui/bottom_nav/bottom_nav_page.dart';
 import '../../ui/onboarding/onboarding_page.dart';
-
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
@@ -35,9 +34,9 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const ForgotPasswordScreen(),
     ),
     GoRoute(
-      path: AppRoutes.home,
-      name: 'home',
-      builder: (context, state) => const HomePage(),
+      path: AppRoutes.bottomNav,
+      name: 'bottomNav',
+      builder: (context, state) => const BottomNavPage(),
     ),
   ],
 );

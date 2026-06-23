@@ -3,7 +3,6 @@ import '../../imports/packages_imports.dart';
 
 import '../../../ui/auth/providers/session_provider.dart';
 
-
 class SessionListenerWrapper extends StatefulWidget {
   final Widget child;
   const SessionListenerWrapper({super.key, required this.child});
@@ -22,7 +21,7 @@ class _SessionListenerWrapperState extends State<SessionListenerWrapper> {
         if (!mounted) return;
         FlutterNativeSplash.remove();
         if (session.status == SessionStatus.authenticated) {
-          appRouter.go(AppRoutes.home);
+          appRouter.go(AppRoutes.bottomNav);
         } else if (session.status == SessionStatus.unauthenticated) {
           appRouter.go(AppRoutes.onboarding);
         }

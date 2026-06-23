@@ -17,11 +17,14 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void login({required BuildContext context, required String email, required String password}) async {
+  void login(
+      {required BuildContext context,
+      required String email,
+      required String password}) async {
     _setLoading(true);
-    
+
     final result = await _repository.login(email: email, password: password);
-    
+
     _setLoading(false);
     result.fold(
       (failure) {
@@ -29,7 +32,7 @@ class AuthProvider extends ChangeNotifier {
       },
       (user) {
         if (context.mounted) {
-          context.go(AppRoutes.home);
+          context.go(AppRoutes.bottomNav);
         }
       },
     );
@@ -37,9 +40,9 @@ class AuthProvider extends ChangeNotifier {
 
   void loginWithGoogle({required BuildContext context}) async {
     _setLoading(true);
-    
+
     final result = await _repository.signInWithGoogle();
-    
+
     _setLoading(false);
     result.fold(
       (failure) {
@@ -47,17 +50,22 @@ class AuthProvider extends ChangeNotifier {
       },
       (user) {
         if (context.mounted) {
-          context.go(AppRoutes.home);
+          context.go(AppRoutes.bottomNav);
         }
       },
     );
   }
 
-  void signUp({required BuildContext context, required String name, required String email, required String password}) async {
+  void signUp(
+      {required BuildContext context,
+      required String name,
+      required String email,
+      required String password}) async {
     _setLoading(true);
-    
-    final result = await _repository.signUp(name: name, email: email, password: password);
-    
+
+    final result =
+        await _repository.signUp(name: name, email: email, password: password);
+
     _setLoading(false);
     result.fold(
       (failure) {
@@ -65,24 +73,27 @@ class AuthProvider extends ChangeNotifier {
       },
       (user) {
         if (context.mounted) {
-          context.go(AppRoutes.home);
+          context.go(AppRoutes.bottomNav);
         }
       },
     );
   }
 
-  void forgotPassword({required BuildContext context, required String email}) async {
+  void forgotPassword(
+      {required BuildContext context, required String email}) async {
     _setLoading(true);
-    
+
     final result = await _repository.forgotPassword(email: email);
-    
+
     _setLoading(false);
     result.fold(
       (failure) {
         showGlobalToast(message: failure.message, status: 'error');
       },
       (success) {
-        showGlobalToast(message: 'Password reset link sent successfully', status: 'success');
+        showGlobalToast(
+            message: 'Password reset link sent successfully',
+            status: 'success');
         if (context.mounted) {
           context.go(AppRoutes.login);
         }
@@ -92,9 +103,9 @@ class AuthProvider extends ChangeNotifier {
 
   void logout({required BuildContext context}) async {
     _setLoading(true);
-    
+
     final result = await _repository.logout();
-    
+
     _setLoading(false);
     result.fold(
       (failure) {
@@ -109,4 +120,3 @@ class AuthProvider extends ChangeNotifier {
     );
   }
 }
-
