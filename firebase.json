@@ -1,0 +1,14 @@
+{
+    "flutter": {
+        "platforms": {
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "trivia-pulse",
+                    "configurations": {
+                        "android": "1:808225531029:android:50ecf9eab5ebcb2eaea79c"
+                    }
+                }
+            }
+        }
+    }
+}
