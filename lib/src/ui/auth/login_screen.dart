@@ -200,7 +200,9 @@ class _LoginView extends StatelessWidget {
                           width: 50.w,
                           height: 50.w,
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              context.read<AuthProvider>().loginWithGoogle(context: context);
+                            },
                             style: TextButton.styleFrom(
                               backgroundColor: const Color(0xFFEA4335).withValues(alpha: 0.8),
                               padding: EdgeInsets.symmetric(horizontal: 10.w),

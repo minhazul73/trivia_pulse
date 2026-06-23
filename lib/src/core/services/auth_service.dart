@@ -1,12 +1,18 @@
-import '../utils/utils.dart';
-import '../config/app_config.dart';
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+import '../config/app_config.dart';
+import '../utils/utils.dart';
 
 class AuthService {
   AuthService._();
   static final AuthService instance = AuthService._();
 
   FirebaseAuth get _firebaseAuth => AppConfig.firebaseAuth;
+
+  GoogleSignIn get _googleSignIn => AppConfig.googleSignIn;
 
   /// Stream of auth state changes. Emits the current user map or null.
   Stream<Map<String, dynamic>?> get authStateChanges {
@@ -88,7 +94,41 @@ class AuthService {
     });
   }
 
-  void dispose() {
-    // Firebase manages its own streams
+  FutureEither<Map<String, dynamic>?> signInWithGoogle() async {
+    return runTask(() async {
+      _initGoogleSignIn();
+      final googleUser = await _googleSignIn.authenticate();
+
+      final idToken = googleUser.authentication.idToken;
+      final authorizationClient = googleUser.authorizationClient;
+      final GoogleSignInClientAuthorization? authorization = await authorizationClient.authorizationForScopes(['email', 'profile']);
+      final accessToken = authorization?.accessToken;
+
+      if (idToken == null || accessToken == null) {
+        throw Exception('Google Sign In Failed: Missing ID or Access Token');
+      }
+
+      final firebaseCredentials = await _firebaseAuth.signInWithCredential(
+        GoogleAuthProvider.credential(idToken: idToken, accessToken: accessToken),
+      );
+      
+      final user = firebaseCredentials.user;
+      if (user == null) return null;
+      return {
+        'id': user.uid,
+        'email': user.email ?? '',
+        'name': user.displayName ?? '',
+        'photoUrl': user.photoURL,
+      };
+    }, requiresNetwork: true);
+  }
+  
+  void _initGoogleSignIn() {
+    unawaited(
+      _googleSignIn.initialize(
+        clientId: AppConfig.googleClientId,
+        serverClientId: AppConfig.serverClientId,
+      ),
+    );
   }
 }

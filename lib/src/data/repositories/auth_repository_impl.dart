@@ -44,6 +44,26 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  FutureEither<AppUser> signInWithGoogle() async {
+    final result = await _authService.signInWithGoogle();
+
+    return result.flatMap((userData) {
+      if (userData == null) {
+        return left(const ServerFailure('Sign in with Google failed: User record not found'));
+      }
+
+      final user = AppUser(
+        id: userData['id'],
+        email: userData['email'] ?? '',
+        name: userData['name'],
+        photoUrl: userData['photoUrl'],
+      );
+
+      return right(user);
+    });
+  }
+
+  @override
   FutureEither<AppUser> signUp({
     required String name, 
     required String email, 

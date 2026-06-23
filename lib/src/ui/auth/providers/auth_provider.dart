@@ -25,9 +25,25 @@ class AuthProvider extends ChangeNotifier {
     _setLoading(false);
     result.fold(
       (failure) {
+        showGlobalToast(message: failure.message, status: 'error');
+      },
+      (user) {
         if (context.mounted) {
-          showToast(context, message: failure.message, status: 'error');
+          context.go(AppRoutes.home);
         }
+      },
+    );
+  }
+
+  void loginWithGoogle({required BuildContext context}) async {
+    _setLoading(true);
+    
+    final result = await _repository.signInWithGoogle();
+    
+    _setLoading(false);
+    result.fold(
+      (failure) {
+        showGlobalToast(message: failure.message, status: 'error');
       },
       (user) {
         if (context.mounted) {
@@ -45,9 +61,7 @@ class AuthProvider extends ChangeNotifier {
     _setLoading(false);
     result.fold(
       (failure) {
-        if (context.mounted) {
-          showToast(context, message: failure.message, status: 'error');
-        }
+        showGlobalToast(message: failure.message, status: 'error');
       },
       (user) {
         if (context.mounted) {
@@ -65,14 +79,29 @@ class AuthProvider extends ChangeNotifier {
     _setLoading(false);
     result.fold(
       (failure) {
-        if (context.mounted) {
-          showToast(context, message: failure.message, status: 'error');
-        }
+        showGlobalToast(message: failure.message, status: 'error');
       },
       (success) {
+        showGlobalToast(message: 'Password reset link sent successfully', status: 'success');
         if (context.mounted) {
-          showToast(context, message: 'Password reset link sent successfully', status: 'success');
+          context.go(AppRoutes.login);
         }
+      },
+    );
+  }
+
+  void logout({required BuildContext context}) async {
+    _setLoading(true);
+    
+    final result = await _repository.logout();
+    
+    _setLoading(false);
+    result.fold(
+      (failure) {
+        showGlobalToast(message: failure.message, status: 'error');
+      },
+      (success) {
+        showGlobalToast(message: 'Logged out successfully', status: 'success');
         if (context.mounted) {
           context.go(AppRoutes.login);
         }

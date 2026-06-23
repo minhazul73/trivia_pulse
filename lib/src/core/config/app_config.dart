@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../firebase_options.dart';
 import '../imports/core_imports.dart';
@@ -11,9 +12,14 @@ class AppConfig {
   AppConfig._();
   static late final Dio dio;
   static FirebaseAuth get firebaseAuth => FirebaseAuth.instance;
+  static GoogleSignIn get googleSignIn => GoogleSignIn.instance;
   static FirebaseFirestore get firestore => FirebaseFirestore.instance;
 
   static String get baseUrl => _getBaseUrl();
+
+  static String get googleClientId => _getGoogleClientId();
+
+  static String get serverClientId => _getServerClientId();
 
   static Future<void> init() async {
     await Firebase.initializeApp(
@@ -52,5 +58,13 @@ class AppConfig {
 
   static String _getBaseUrl() {
     return dotenv.get('API_BASE_URL');
+  }
+  
+  static String _getGoogleClientId() {
+    return dotenv.get('CLIENT_ID');
+  }
+  
+  static String _getServerClientId() {
+    return dotenv.get('SERVER_CLIENT_ID');
   }
 }

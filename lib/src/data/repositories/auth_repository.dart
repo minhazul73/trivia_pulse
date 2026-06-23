@@ -11,6 +11,9 @@ abstract class AuthRepository {
     required String password,
   });
 
+  /// Sign in with Google
+  FutureEither<AppUser> signInWithGoogle();
+
   /// Sign up with email, password, and optional name
   FutureEither<AppUser> signUp({
     required String name,

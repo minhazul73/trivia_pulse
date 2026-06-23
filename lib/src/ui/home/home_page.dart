@@ -1,6 +1,7 @@
 import '../../core/imports/core_imports.dart';
 import '../../core/imports/packages_imports.dart';
 
+import '../auth/providers/auth_provider.dart';
 import '../auth/providers/session_provider.dart';
 
 
@@ -18,8 +19,16 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: const AppTopBar(
+      appBar: AppTopBar(
         title: 'Home',
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              context.read<AuthProvider>().logout(context: context);
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: Padding(

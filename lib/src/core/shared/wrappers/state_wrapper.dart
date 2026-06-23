@@ -1,3 +1,4 @@
+import '../../../ui/auth/providers/auth_provider.dart';
 import '../../imports/imports.dart';
 import '../../../data/repositories/auth_repository_impl.dart';
 import '../../../ui/auth/providers/session_provider.dart';
@@ -15,7 +16,10 @@ class StateWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<SessionProvider>(create: (_) => SessionProvider(repository: AuthRepositoryImpl())),
+        ChangeNotifierProvider<SessionProvider>(
+            create: (_) => SessionProvider(repository: AuthRepositoryImpl())),
+        ChangeNotifierProvider<AuthProvider>(
+            create: (_) => AuthProvider(repository: AuthRepositoryImpl())),
       ],
       child: child,
     );
