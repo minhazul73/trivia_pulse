@@ -1,7 +1,9 @@
 import 'package:go_router/go_router.dart';
 import '../../data/models/category_model.dart';
+import '../../data/models/result_model.dart';
 import '../../ui/quiz/quiz_customization_page.dart';
 import '../../ui/quiz/quiz_question_page.dart';
+import '../../ui/quiz/quiz_result_page.dart';
 import 'global_navigator.dart';
 import 'app_routes.dart';
 
@@ -54,6 +56,14 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.quizQuestion,
       name: 'quizQuestion',
       builder: (_, _) => const QuizQuestionPage(),
+    ),
+    GoRoute(
+      path: AppRoutes.quizResult,
+      name: 'quizResult',
+      builder: (_, state) {
+        final result = state.extra! as ResultModel;
+        return QuizResultPage(result: result);
+      },
     ),
   ],
 );

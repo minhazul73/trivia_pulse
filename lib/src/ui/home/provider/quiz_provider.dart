@@ -3,6 +3,7 @@ import 'dart:async';
 import '../../../core/imports/imports.dart';
 import '../../../data/models/category_model.dart';
 import '../../../data/models/question_model.dart';
+import '../../../data/models/result_model.dart';
 import '../../../data/repositories/quiz/quiz_repository.dart';
 
 enum QuizStatus { idle, active, finished }
@@ -41,6 +42,10 @@ class QuizProvider extends ChangeNotifier {
 
   List<String> _shuffledAnswers = [];
   List<String> get shuffledAnswers => _shuffledAnswers;
+
+  /// Records the player's selected answer for each question.
+  /// A null entry means the question was skipped (timer ran out).
+  List<String?> _userAnswers = [];
 
   Timer? _timer;
 
@@ -98,7 +103,27 @@ class QuizProvider extends ChangeNotifier {
     _status = QuizStatus.active;
     _currentIndex = 0;
     _score = 0;
+    _userAnswers = [];
     _loadQuestionData();
+  }
+
+  /// Builds a [ResultModel] from the finished quiz state.
+  /// Call only when [status] == [QuizStatus.finished].
+  ResultModel buildResult() {
+    // Pad with nulls if any trailing questions were skipped.
+    final answers = List<String?>.from(_userAnswers);
+    while (answers.length < _questions.length) {
+      answers.add(null);
+    }
+    return ResultModel(
+      totalQuestions: _questions.length,
+      correctCount: _score ~/ 10,
+      score: _score,
+      selectedAnswers: answers.map((a) => a ?? '').toList(),
+      questions: List.unmodifiable(_questions),
+      categoryName: _questions.isNotEmpty ? _questions.first.category : '',
+      timestamp: DateTime.now(),
+    );
   }
 
   void _loadQuestionData() {
@@ -145,6 +170,10 @@ class QuizProvider extends ChangeNotifier {
     if (_status != QuizStatus.active || _currentIndex >= _questions.length) return;
 
     final question = _questions[_currentIndex];
+
+    // Record the selected answer (null = skipped/timed-out).
+    _userAnswers.add(_selectedAnswer);
+
     if (_selectedAnswer == question.correctAnswer) {
       _score += 10;
     }
@@ -156,11 +185,6 @@ class QuizProvider extends ChangeNotifier {
       _timer?.cancel();
       _status = QuizStatus.finished;
       notifyListeners();
-
-      showGlobalToast(
-        message: 'Quiz Finished! Your score: $_score',
-        status: 'success',
-      );
     }
   }
 
@@ -170,6 +194,7 @@ class QuizProvider extends ChangeNotifier {
     _questions = [];
     _currentIndex = 0;
     _score = 0;
+    _userAnswers = [];
     notifyListeners();
   }
 

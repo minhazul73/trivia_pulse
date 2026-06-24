@@ -13,5 +13,6 @@ abstract final class AppRoutes {
   static const String forgotPassword = '/forgot-password';
   static const String quizCustomization = '/quiz-customization';
   static const String quizQuestion = '/quiz-question';
+  static const String quizResult = '/quiz-result';
   
 }

@@ -46,9 +46,8 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
     if (provider.status == QuizStatus.finished) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          // Future Result Page navigation goes here. For now, pop.
-          context.pop();
-          provider.quitQuiz(); 
+          final result = provider.buildResult();
+          context.go(AppRoutes.quizResult, extra: result);
         }
       });
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
