@@ -21,8 +21,6 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
-
-    // Check if we can pop
     final bool canPop = context.canPop();
 
     void handleBack() {
@@ -35,43 +33,65 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
       }
     }
 
+    final titleContent = titleWidget ??
+        (title == null
+            ? null
+            : Text(
+                title!,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.1,
+                ),
+              ));
+
     return AppBar(
       centerTitle: centerTitle,
       elevation: 0,
-      backgroundColor: isTransparent ? Colors.transparent : null,
+      scrolledUnderElevation: 0,
+      backgroundColor: isTransparent
+          ? Colors.transparent
+          : theme.colorScheme.surface.withValues(alpha: 0.95),
+      surfaceTintColor: Colors.transparent,
       shadowColor: Colors.transparent,
-      title: titleWidget ??
-          (title == null
-              ? null
-              : Text(
-                  title!,
-                  style: theme.appBarTheme.titleTextStyle?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ) ??
-                      theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                )),
-      leadingWidth: 40.w,
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(1),
+        child: Divider(
+          height: 1,
+          thickness: 1,
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+        ),
+      ),
+      title: titleContent,
+      leadingWidth: 56.w,
       leading: !canPop
           ? null
-          : GestureDetector(
-              onTap: handleBack,
-              child: ColoredBox(
-                color: Colors.transparent,
-                child: Icon(
-                  Icons.arrow_back,
-                  color:
-                      theme.appBarTheme.iconTheme?.color ??
-                      theme.colorScheme.onSurface,
+          : Padding(
+              padding: EdgeInsets.only(left: AppSpacing.sm),
+              child: GestureDetector(
+                onTap: handleBack,
+                behavior: HitTestBehavior.opaque,
+                child: Container(
+                  width: 36.r,
+                  height: 36.r,
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    borderRadius: AppBorders.md,
+                  ),
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    size: 18.r,
+                    color: theme.colorScheme.onSurface,
+                  ),
                 ),
               ),
             ),
-      iconTheme: theme.appBarTheme.iconTheme,
-      actions: actions ?? [],
+      actions: [
+        ...?actions,
+        SizedBox(width: AppSpacing.xs),
+      ],
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 1);
 }

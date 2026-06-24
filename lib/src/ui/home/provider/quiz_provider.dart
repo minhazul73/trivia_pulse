@@ -211,6 +211,9 @@ class QuizProvider extends ChangeNotifier {
       },
       (categories) {
         _categories = categories;
+        // Re-apply any already-cached question counts so the UI never
+        // regresses to null after a re-fetch (e.g. returning from result page).
+        _mergeCachedCounts();
         _setLoading(false);
         _loadAllCategoryCounts();
         notifyListeners();
@@ -218,9 +221,33 @@ class QuizProvider extends ChangeNotifier {
     );
   }
 
+  /// Patches every category in [_categories] whose [questionCount] is null
+  /// with a value already present in [_categoryCounts] (populated on previous
+  /// fetches). This avoids flickering back to "Loading..." on re-navigation.
+  void _mergeCachedCounts() {
+    for (var i = 0; i < _categories.length; i++) {
+      final cat = _categories[i];
+      final cached = _categoryCounts[cat.id];
+      if (cached != null && cat.questionCount == null) {
+        _categories[i] = cat.copyWith(questionCount: cached);
+      }
+    }
+  }
+
   Future<void> _loadAllCategoryCounts() async {
     for (final category in _categories) {
-      if (_categoryCounts.containsKey(category.id)) continue;
+      if (_categoryCounts.containsKey(category.id)) {
+        // Count already cached — make sure the category model reflects it.
+        // (The model may have been reset to null by a fresh getCategories call.)
+        final index = _categories.indexWhere((c) => c.id == category.id);
+        if (index != -1 && _categories[index].questionCount == null) {
+          _categories[index] = category.copyWith(
+            questionCount: _categoryCounts[category.id],
+          );
+          notifyListeners();
+        }
+        continue;
+      }
 
       final result = await _repository.getCategoryQuestionCount(category.id);
       result.fold(
