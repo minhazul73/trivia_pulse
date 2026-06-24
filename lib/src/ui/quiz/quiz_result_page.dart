@@ -1,12 +1,45 @@
 // ignore_for_file: prefer_relative_imports
 import '../../core/imports/imports.dart';
 import '../../data/models/result_model.dart';
+import '../../ui/auth/providers/session_provider.dart';
+import '../../ui/profile/provider/result_history_provider.dart';
 import '../home/provider/quiz_provider.dart';
 
-class QuizResultPage extends StatelessWidget {
+class QuizResultPage extends StatefulWidget {
   final ResultModel result;
 
   const QuizResultPage({super.key, required this.result});
+
+  @override
+  State<QuizResultPage> createState() => _QuizResultPageState();
+}
+
+class _QuizResultPageState extends State<QuizResultPage> {
+  @override
+  void initState() {
+    super.initState();
+    // Save the result once, after the first frame, so the provider tree is ready.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final session = context.read<SessionProvider>();
+      final uid = session.user?.id;
+      if (uid != null) {
+        context.read<ResultHistoryProvider>().init(
+          uid: uid,
+          displayName: session.user?.name,
+          photoUrl: session.user?.photoUrl,
+        ).then((_) {
+          if (mounted) {
+            context
+                .read<ResultHistoryProvider>()
+                .saveResult(widget.result);
+          }
+        });
+      }
+    });
+  }
+
+  ResultModel get result => widget.result;
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +48,9 @@ class QuizResultPage extends StatelessWidget {
         : result.correctCount / result.totalQuestions;
 
     final appColors = context.appColors;
+    // Questions are read from the provider — they stay in memory while this
+    // page is showing. They're NOT stored on ResultModel to save space.
+    final questions = context.read<QuizProvider>().questions;
 
     final (scoreColor, scoreLabel, scoreIcon) = accuracy >= 0.7
         ? (appColors.success, 'Excellent! 🏆', Icons.emoji_events_rounded)
@@ -131,8 +167,9 @@ class QuizResultPage extends StatelessWidget {
           SizedBox(height: AppSpacing.sm),
 
           // ── Answer review cards ────────────────────────────────────────
-          ...List.generate(result.questions.length, (i) {
-            final q = result.questions[i];
+          if (questions.isNotEmpty)
+          ...List.generate(questions.length, (i) {
+            final q = questions[i];
             final selected = result.selectedAnswers[i];
             final isSkipped = selected.isEmpty;
             final isCorrect = !isSkipped && selected == q.correctAnswer;

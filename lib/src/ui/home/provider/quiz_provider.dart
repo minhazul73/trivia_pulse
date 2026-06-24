@@ -47,6 +47,10 @@ class QuizProvider extends ChangeNotifier {
   /// A null entry means the question was skipped (timer ran out).
   List<String?> _userAnswers = [];
 
+  // Stored when getQuestions() is called so buildResult() can embed them.
+  QuestionDifficulty _selectedDifficulty = QuestionDifficulty.any;
+  QuestionType _selectedType = QuestionType.any;
+
   Timer? _timer;
 
   void _setLoading(bool value) {
@@ -68,6 +72,9 @@ class QuizProvider extends ChangeNotifier {
     required QuestionDifficulty difficulty,
   }) async {
     _setLoading(true);
+    // Persist the settings so buildResult() can include them.
+    _selectedDifficulty = difficulty;
+    _selectedType = type;
     final result = await _repository.getQuestions(
       categoryId: categoryId,
       amount: amount,
@@ -120,8 +127,9 @@ class QuizProvider extends ChangeNotifier {
       correctCount: _score ~/ 10,
       score: _score,
       selectedAnswers: answers.map((a) => a ?? '').toList(),
-      questions: List.unmodifiable(_questions),
       categoryName: _questions.isNotEmpty ? _questions.first.category : '',
+      difficulty: _selectedDifficulty.name,
+      questionType: _selectedType.name,
       timestamp: DateTime.now(),
     );
   }
