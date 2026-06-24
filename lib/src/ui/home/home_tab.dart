@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import '../../core/imports/imports.dart';
 import 'provider/quiz_provider.dart';
 
@@ -11,14 +9,6 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<QuizProvider>().getCategories();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final quizProvider = context.watch<QuizProvider>();
@@ -47,11 +37,17 @@ class _HomeTabState extends State<HomeTab> {
                     itemCount: quizProvider.categories.length,
                     itemBuilder: ((context, index) {
                       final category = quizProvider.categories[index];
-                      final count = quizProvider.categoryCounts[category.id];
+                      final count = category.questionCount?.totalQuestionCount;
                       return AppCard(
                         trailing: const Icon(Icons.arrow_forward_ios),
                         title: category.name,
-                        subtitle: count != null ? '$count questions' : 'Loading...',
+                        subtitle: count != null
+                            ? '$count questions'
+                            : 'Loading...',
+                        onTap: () => context.push(
+                          AppRoutes.quizCustomization,
+                          extra: {'category': category},
+                        ),
                       );
                     }),
                     separatorBuilder: (context, index) {
@@ -60,6 +56,7 @@ class _HomeTabState extends State<HomeTab> {
                   ),
                 ),
               ),
+              // AppSpacing.xxxs.verticalSpace,
             ],
           ),
         ),

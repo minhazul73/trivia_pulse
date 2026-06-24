@@ -4,6 +4,7 @@ import '../../core/imports/packages_imports.dart';
 import '../auth/providers/auth_provider.dart';
 import '../auth/providers/session_provider.dart';
 import '../home/home_tab.dart';
+import '../home/provider/quiz_provider.dart';
 import 'tabs/leaderboard_tab.dart';
 import 'tabs/profile_tab.dart';
 
@@ -15,6 +16,14 @@ class BottomNavPage extends StatefulWidget {
 }
 
 class _BottomNavPageState extends State<BottomNavPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<QuizProvider>().getCategories();
+    });
+  }
+
   int _currentIndex = 0;
 
   @override

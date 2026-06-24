@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 abstract final class AppSpacing {
   AppSpacing._();
 
+  static const double _xxxs = 1;
   static const double _xxs = 2;
   static const double _xs = 4;
   static const double _sm = 8;
@@ -20,6 +21,9 @@ abstract final class AppSpacing {
   static const double _xl = 32;
   static const double _xxl = 48;
   static const double _xxxl = 64;
+
+  /// 1 pt — hairline gap, icon-to-label spacing.
+  static double get xxxs => _xxxs.r;
 
   /// 2 pt — hairline gap, icon-to-label spacing.
   static double get xxs => _xxs.r;

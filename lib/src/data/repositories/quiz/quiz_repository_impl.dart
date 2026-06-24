@@ -22,7 +22,7 @@ class QuizRepositoryImpl implements QuizRepository {
     );
   }
   @override
-  FutureEither<int> getCategoryQuestionCount(int categoryId) async {
+  FutureEither<CategoryQuestionCountModel> getCategoryQuestionCount(int categoryId) async {
     final response = await _apiClient.get('/api_count.php', queryParameters: {
       'category': categoryId,
     });
@@ -32,7 +32,7 @@ class QuizRepositoryImpl implements QuizRepository {
         return left(failure);
       },
       (response) {
-        final data = response.data['category_question_count']['total_question_count'] as int;
+        final data = CategoryQuestionCountModel.fromJson(response.data['category_question_count']);
         return right(data);
       },
     );
@@ -44,9 +44,28 @@ class QuizRepositoryImpl implements QuizRepository {
     required int amount,
     required QuestionType type,
     required QuestionDifficulty difficulty,
-  }) {
-    // TODO: implement getQuestions
-    throw UnimplementedError();
+  }) async {
+    // https://opentdb.com/api.php?amount=10&category=22&difficulty=medium&type=multiple
+    final response = await _apiClient.get(
+      '/api.php',
+      queryParameters: {
+        'amount': amount,
+        'category': categoryId,
+        if (difficulty != QuestionDifficulty.any) 'difficulty': difficulty.name,
+        if (type != QuestionType.any) 'type': type.name,
+      },
+    );
+    return response.fold(
+      (failure) {
+        AppLogger.error('Failed to fetch questions: $failure');
+        return left(failure);
+      },
+      (response) {
+        final data = QuestionModel.fromJsonList(response.data['results']);
+        AppLogger.success('Questions fetched successfully: ${data.toString()}');
+        return right(data);
+      },
+    );
   }
 }
   

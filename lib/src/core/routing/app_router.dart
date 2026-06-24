@@ -1,4 +1,7 @@
 import 'package:go_router/go_router.dart';
+import '../../data/models/category_model.dart';
+import '../../ui/quiz/quiz_customization_page.dart';
+import '../../ui/quiz/quiz_question_page.dart';
 import 'global_navigator.dart';
 import 'app_routes.dart';
 
@@ -16,27 +19,41 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.onboarding,
       name: 'onboarding',
-      builder: (context, state) => const OnboardingPage(),
+      builder: (_, _) => const OnboardingPage(),
     ),
     GoRoute(
       path: AppRoutes.login,
       name: 'login',
-      builder: (context, state) => const LoginScreen(),
+      builder: (_, _) => const LoginScreen(),
     ),
     GoRoute(
       path: AppRoutes.signup,
       name: 'signup',
-      builder: (context, state) => const SignupScreen(),
+      builder: (_, _) => const SignupScreen(),
     ),
     GoRoute(
       path: AppRoutes.forgotPassword,
       name: 'forgotPassword',
-      builder: (context, state) => const ForgotPasswordScreen(),
+      builder: (_, _) => const ForgotPasswordScreen(),
     ),
     GoRoute(
       path: AppRoutes.bottomNav,
       name: 'bottomNav',
-      builder: (context, state) => const BottomNavPage(),
+      builder: (_, _) => const BottomNavPage(),
+    ),
+    GoRoute(
+      path: AppRoutes.quizCustomization,
+      name: 'quizCustomization',
+      builder: (_, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        final category = extra['category'] as CategoryModel;
+        return QuizCustomizationPage(category: category);
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.quizQuestion,
+      name: 'quizQuestion',
+      builder: (_, _) => const QuizQuestionPage(),
     ),
   ],
 );

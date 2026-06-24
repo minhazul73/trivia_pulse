@@ -7,7 +7,7 @@ abstract class QuizRepository {
   FutureEither<List<CategoryModel>> getCategories();
 
   /// Get question count for a specific category
-  FutureEither<int> getCategoryQuestionCount(int categoryId);
+  FutureEither<CategoryQuestionCountModel> getCategoryQuestionCount(int categoryId);
 
   /// Get questions based on category, amount, and difficulty
   FutureEither<List<QuestionModel>> getQuestions({

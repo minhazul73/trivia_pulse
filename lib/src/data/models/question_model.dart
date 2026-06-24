@@ -1,9 +1,36 @@
 import 'package:flutter/foundation.dart';
 import 'package:equatable/equatable.dart';
 
+import 'package:html_unescape/html_unescape.dart';
+
 enum QuestionType { multiple, boolean, any }
 
 enum QuestionDifficulty { easy, medium, hard, any }
+
+extension HtmlDecodeX on String {
+  String get htmlDecode {
+    return HtmlUnescape().convert(this);
+  }
+}
+
+extension EnumX on String {
+  QuestionType get toType {
+    return switch (this) {
+      'multiple' => QuestionType.multiple,
+      'boolean' => QuestionType.boolean,
+      _ => QuestionType.any,
+    };
+  }
+
+  QuestionDifficulty get toDifficulty {
+    return switch (this) {
+      'easy' => QuestionDifficulty.easy,
+      'medium' => QuestionDifficulty.medium,
+      'hard' => QuestionDifficulty.hard,
+      _ => QuestionDifficulty.any,
+    };
+  }
+}
 
 class QuestionModel extends Equatable {
   final QuestionType type;
@@ -63,13 +90,19 @@ class QuestionModel extends Equatable {
 
   factory QuestionModel.fromJson(Map<String, dynamic> json) {
     return QuestionModel(
-      type: json['type'],
-      difficulty: json['difficulty'],
-      category: json['category'],
-      question: json['question'],
-      correctAnswer: json['correct_answer'],
-      incorrectAnswers: List<String>.from(json['incorrect_answers']),
+      type: (json['type'] as String).toType,
+      difficulty: (json['difficulty'] as String).toDifficulty,
+      category: (json['category'] as String).htmlDecode,
+      question: (json['question'] as String).htmlDecode,
+      correctAnswer: (json['correct_answer'] as String).htmlDecode,
+      incorrectAnswers: List<String>.from(json['incorrect_answers'])
+          .map((e) => e.htmlDecode)
+          .toList(),
     );
+  }
+
+  static List<QuestionModel> fromJsonList(List<dynamic> json) {
+    return json.map((x) => QuestionModel.fromJson(x)).toList();
   }
 
   @override

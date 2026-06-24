@@ -3,7 +3,7 @@ import '../../imports/imports.dart';
 class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   const AppTopBar({
     super.key,
-    required this.title,
+    this.title,
     this.titleWidget,
     this.actions,
     this.centerTitle = true,
@@ -11,7 +11,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
     this.isTransparent = false,
   });
 
-  final String title;
+  final String? title;
   final Widget? titleWidget;
   final List<Widget>? actions;
   final VoidCallback? onPressed;
@@ -41,15 +41,17 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: isTransparent ? Colors.transparent : null,
       shadowColor: Colors.transparent,
       title: titleWidget ??
-          Text(
-            title,
-            style: theme.appBarTheme.titleTextStyle?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ) ??
-                theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-          ),
+          (title == null
+              ? null
+              : Text(
+                  title!,
+                  style: theme.appBarTheme.titleTextStyle?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ) ??
+                      theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                )),
       leadingWidth: 40.w,
       leading: !canPop
           ? null
@@ -59,7 +61,8 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
                 color: Colors.transparent,
                 child: Icon(
                   Icons.arrow_back,
-                  color: theme.appBarTheme.iconTheme?.color ??
+                  color:
+                      theme.appBarTheme.iconTheme?.color ??
                       theme.colorScheme.onSurface,
                 ),
               ),
