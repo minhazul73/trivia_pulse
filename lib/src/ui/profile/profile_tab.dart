@@ -1,8 +1,8 @@
-import '../../../core/imports/imports.dart';
-import '../../../data/models/result_model.dart';
-import '../../../ui/auth/providers/session_provider.dart';
-import '../../../ui/profile/provider/result_history_provider.dart';
-import '../../auth/providers/auth_provider.dart';
+import '../../core/imports/imports.dart';
+import '../../data/models/result_model.dart';
+import '../auth/providers/session_provider.dart';
+import 'provider/result_history_provider.dart';
+import '../auth/providers/auth_provider.dart';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

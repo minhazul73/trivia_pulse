@@ -1,7 +1,7 @@
-import '../../../core/imports/imports.dart';
-import '../../../data/models/leaderboard_entry_model.dart';
-import '../../../ui/auth/providers/session_provider.dart';
-import '../../../ui/leaderboard/provider/leaderboard_provider.dart';
+import '../../core/imports/imports.dart';
+import '../../data/models/leaderboard_entry_model.dart';
+import '../auth/providers/session_provider.dart';
+import 'provider/leaderboard_provider.dart';
 
 // ── Medal helpers ─────────────────────────────────────────────────────────────
 

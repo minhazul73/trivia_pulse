@@ -12,17 +12,11 @@ import '../../ui/auth/signup_screen.dart';
 import '../../ui/auth/forgot_password_screen.dart';
 
 import '../../ui/bottom_nav/bottom_nav_page.dart';
-import '../../ui/onboarding/onboarding_page.dart';
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
   initialLocation: AppRoutes.login,
   routes: <RouteBase>[
-    GoRoute(
-      path: AppRoutes.onboarding,
-      name: 'onboarding',
-      builder: (_, _) => const OnboardingPage(),
-    ),
     GoRoute(
       path: AppRoutes.login,
       name: 'login',

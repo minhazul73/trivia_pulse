@@ -2,8 +2,8 @@ import '../../core/imports/imports.dart';
 
 import '../home/home_tab.dart';
 import '../home/provider/quiz_provider.dart';
-import 'tabs/leaderboard_tab.dart';
-import 'tabs/profile_tab.dart';
+import '../leaderboard/leaderboard_tab.dart';
+import '../profile/profile_tab.dart';
 
 class BottomNavPage extends StatefulWidget {
   const BottomNavPage({super.key});
