@@ -137,6 +137,7 @@ class _QuizQuestionPageState extends State<QuizQuestionPage>
         body: SafeArea(
           child: Column(
             children: [
+              AppSpacing.xxs.verticalSpace,
               // ── Quiz progress bar ────────────────────────────────────────
               AnimatedContainer(
                 duration: AppDurations.fast,
@@ -185,8 +186,7 @@ class _QuizQuestionPageState extends State<QuizQuestionPage>
                                     vertical: 2.r,
                                   ),
                                   decoration: BoxDecoration(
-                                    color:
-                                        diffColor.withValues(alpha: 0.12),
+                                    color: diffColor.withValues(alpha: 0.12),
                                     borderRadius: AppBorders.full,
                                   ),
                                   child: Text(
@@ -215,12 +215,15 @@ class _QuizQuestionPageState extends State<QuizQuestionPage>
 
                       // ── Question text ─────────────────────────────────
                       Text(
-                        question.question,
-                        style: context.textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          height: 1.35,
-                        ),
-                      ).animate().fadeIn(duration: AppDurations.normal).slideY(
+                            question.question,
+                            style: context.textTheme.headlineSmall?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              height: 1.35,
+                            ),
+                          )
+                          .animate()
+                          .fadeIn(duration: AppDurations.normal)
+                          .slideY(
                             begin: 0.05,
                             end: 0,
                             duration: AppDurations.normal,
@@ -228,28 +231,22 @@ class _QuizQuestionPageState extends State<QuizQuestionPage>
                       SizedBox(height: AppSpacing.xl),
 
                       // ── Answer options ────────────────────────────────
-                      ...List.generate(
-                        provider.shuffledAnswers.length,
-                        (i) {
-                          final answer = provider.shuffledAnswers[i];
-                          final isSelected =
-                              provider.selectedAnswer == answer;
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: AppSpacing.sm),
-                            child: _AnswerOption(
-                              label: i < _optionLabels.length
-                                  ? _optionLabels[i]
-                                  : '${i + 1}',
-                              text: answer,
-                              isSelected: isSelected,
-                              delay: Duration(
-                                milliseconds: 100 + i * 70,
-                              ),
-                              onTap: () => provider.selectAnswer(answer),
-                            ),
-                          );
-                        },
-                      ),
+                      ...List.generate(provider.shuffledAnswers.length, (i) {
+                        final answer = provider.shuffledAnswers[i];
+                        final isSelected = provider.selectedAnswer == answer;
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: AppSpacing.sm),
+                          child: _AnswerOption(
+                            label: i < _optionLabels.length
+                                ? _optionLabels[i]
+                                : '${i + 1}',
+                            text: answer,
+                            isSelected: isSelected,
+                            delay: Duration(milliseconds: 100 + i * 70),
+                            onTap: () => provider.selectAnswer(answer),
+                          ),
+                        );
+                      }),
                       SizedBox(height: AppSpacing.lg),
                     ],
                   ),
@@ -336,10 +333,7 @@ class _QuizAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                context.colors.primary,
-                context.colors.tertiary,
-              ],
+              colors: [context.colors.primary, context.colors.tertiary],
             ),
             borderRadius: AppBorders.full,
           ),
@@ -363,14 +357,6 @@ class _QuizAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
       ],
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(1),
-        child: Divider(
-          height: 1,
-          thickness: 1,
-          color: context.colors.outlineVariant.withValues(alpha: 0.5),
-        ),
-      ),
     );
   }
 
@@ -525,78 +511,79 @@ class _AnswerOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: AppDurations.fast,
-        curve: AppCurves.standard,
-        padding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.md,
-        ),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? context.colors.primaryContainer
-              : context.colors.surfaceContainerLow,
-          borderRadius: AppBorders.lg,
-          border: Border.all(
-            color: isSelected
-                ? context.colors.primary
-                : context.colors.outlineVariant,
-            width: isSelected ? 2 : 1,
-          ),
-          boxShadow: isSelected ? AppShadows.subtle : AppShadows.none,
-        ),
-        child: Row(
-          children: [
-            // Letter badge
-            AnimatedContainer(
-              duration: AppDurations.fast,
-              width: 34.r,
-              height: 34.r,
-              decoration: BoxDecoration(
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: AppDurations.fast,
+            curve: AppCurves.standard,
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.md,
+            ),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? context.colors.primaryContainer
+                  : context.colors.surfaceContainerLow,
+              borderRadius: AppBorders.lg,
+              border: Border.all(
                 color: isSelected
                     ? context.colors.primary
-                    : context.colors.surfaceContainerHighest,
-                borderRadius: AppBorders.sm,
+                    : context.colors.outlineVariant,
+                width: isSelected ? 2 : 1,
               ),
-              child: Center(
-                child: Text(
-                  label,
-                  style: context.textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
+              boxShadow: isSelected ? AppShadows.subtle : AppShadows.none,
+            ),
+            child: Row(
+              children: [
+                // Letter badge
+                AnimatedContainer(
+                  duration: AppDurations.fast,
+                  width: 34.r,
+                  height: 34.r,
+                  decoration: BoxDecoration(
                     color: isSelected
-                        ? context.colors.onPrimary
-                        : context.colors.onSurfaceVariant,
+                        ? context.colors.primary
+                        : context.colors.surfaceContainerHighest,
+                    borderRadius: AppBorders.sm,
+                  ),
+                  child: Center(
+                    child: Text(
+                      label,
+                      style: context.textTheme.labelLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: isSelected
+                            ? context.colors.onPrimary
+                            : context.colors.onSurfaceVariant,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Text(
-                text,
-                style: context.textTheme.bodyLarge?.copyWith(
-                  fontWeight:
-                      isSelected ? FontWeight.w600 : FontWeight.normal,
-                  color: isSelected
-                      ? context.colors.onPrimaryContainer
-                      : context.colors.onSurface,
+                SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Text(
+                    text,
+                    style: context.textTheme.bodyLarge?.copyWith(
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.normal,
+                      color: isSelected
+                          ? context.colors.onPrimaryContainer
+                          : context.colors.onSurface,
+                    ),
+                  ),
                 ),
-              ),
+                if (isSelected)
+                  Padding(
+                    padding: EdgeInsets.only(left: AppSpacing.sm),
+                    child: Icon(
+                      Icons.check_circle_rounded,
+                      color: context.colors.primary,
+                      size: 20.r,
+                    ),
+                  ),
+              ],
             ),
-            if (isSelected)
-              Padding(
-                padding: EdgeInsets.only(left: AppSpacing.sm),
-                child: Icon(
-                  Icons.check_circle_rounded,
-                  color: context.colors.primary,
-                  size: 20.r,
-                ),
-              ),
-          ],
-        ),
-      ),
-    )
+          ),
+        )
         .animate()
         .fadeIn(delay: delay, duration: AppDurations.normal)
         .slideX(

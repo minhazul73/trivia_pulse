@@ -1,6 +1,5 @@
 import '../../core/imports/imports.dart';
 
-import '../auth/providers/auth_provider.dart';
 import '../home/home_tab.dart';
 import '../home/provider/quiz_provider.dart';
 import 'tabs/leaderboard_tab.dart';
@@ -44,13 +43,6 @@ class _BottomNavPageState extends State<BottomNavPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final session = context.watch<SessionProvider>();
-    final authProvider = context.read<AuthProvider>();
-    // final user = session.user;
-
-    // HomeTab already has its own hero header — only show AppTopBar on other tabs.
-    final showAppBar = _currentIndex != 0;
-
     final tabs = <Widget>[
       const HomeTab(),
       const LeaderboardTab(),
@@ -58,34 +50,12 @@ class _BottomNavPageState extends State<BottomNavPage> {
     ];
 
     return Scaffold(
-      appBar: showAppBar
-          ? AppTopBar(
-              title: _currentIndex == 2
-                  ? 'My Profile'
-                  : _destinations[_currentIndex].label,
-              centerTitle: false,
-              actions: [
-                if (_currentIndex == 2)
-                  IconButton(
-                    tooltip: 'Sign out',
-                    icon: Icon(
-                      Icons.logout_rounded,
-                      size: 20.r,
-                      color: context.colors.error,
-                    ),
-                    onPressed: () => authProvider.logout(context: context),
-                  ),
-              ],
-            )
-          : null,
       body: AnimatedSwitcher(
         duration: AppDurations.normal,
         switchInCurve: AppCurves.emphasized,
         switchOutCurve: AppCurves.emphasized,
-        transitionBuilder: (child, animation) => FadeTransition(
-          opacity: animation,
-          child: child,
-        ),
+        transitionBuilder: (child, animation) =>
+            FadeTransition(opacity: animation, child: child),
         child: KeyedSubtree(
           key: ValueKey<int>(_currentIndex),
           child: tabs[_currentIndex],

@@ -33,7 +33,8 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
       }
     }
 
-    final titleContent = titleWidget ??
+    final titleContent =
+        titleWidget ??
         (title == null
             ? null
             : Text(
@@ -53,14 +54,14 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
           : theme.colorScheme.surface.withValues(alpha: 0.95),
       surfaceTintColor: Colors.transparent,
       shadowColor: Colors.transparent,
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(1),
-        child: Divider(
-          height: 1,
-          thickness: 1,
-          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
-        ),
-      ),
+      // bottom: PreferredSize(
+      //   preferredSize: const Size.fromHeight(1),
+      //   child: Divider(
+      //     height: 1,
+      //     thickness: 1,
+      //     color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+      //   ),
+      // ),
       title: titleContent,
       leadingWidth: 56.w,
       leading: !canPop

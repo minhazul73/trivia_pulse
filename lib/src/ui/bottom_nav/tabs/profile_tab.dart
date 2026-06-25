@@ -2,6 +2,7 @@ import '../../../core/imports/imports.dart';
 import '../../../data/models/result_model.dart';
 import '../../../ui/auth/providers/session_provider.dart';
 import '../../../ui/profile/provider/result_history_provider.dart';
+import '../../auth/providers/auth_provider.dart';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -54,10 +55,10 @@ class _ProfileTabState extends State<ProfileTab> {
       final uid = session.user?.id;
       if (uid != null) {
         await context.read<ResultHistoryProvider>().init(
-              uid: uid,
-              displayName: session.user?.name,
-              photoUrl: session.user?.photoUrl,
-            );
+          uid: uid,
+          displayName: session.user?.name,
+          photoUrl: session.user?.photoUrl,
+        );
       }
     });
   }
@@ -108,41 +109,42 @@ class _ProfileTabState extends State<ProfileTab> {
                 AppSpacing.sm,
               ),
               sliver: SliverToBoxAdapter(
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.history_rounded,
-                      size: 18.r,
-                      color: context.colors.primary,
-                    ),
-                    SizedBox(width: AppSpacing.xs),
-                    Text(
-                      'Quiz History',
-                      style: context.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Spacer(),
-                    if (provider.results.isNotEmpty)
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: AppSpacing.sm,
-                          vertical: 2.r,
+                child:
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.history_rounded,
+                          size: 18.r,
+                          color: context.colors.primary,
                         ),
-                        decoration: BoxDecoration(
-                          color: context.colors.primaryContainer,
-                          borderRadius: AppBorders.full,
-                        ),
-                        child: Text(
-                          '${provider.results.length} games',
-                          style: context.textTheme.labelSmall?.copyWith(
-                            color: context.colors.onPrimaryContainer,
+                        SizedBox(width: AppSpacing.xs),
+                        Text(
+                          'Quiz History',
+                          style: context.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                  ],
-                ).animate().fadeIn(
+                        const Spacer(),
+                        if (provider.results.isNotEmpty)
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: AppSpacing.sm,
+                              vertical: 2.r,
+                            ),
+                            decoration: BoxDecoration(
+                              color: context.colors.primaryContainer,
+                              borderRadius: AppBorders.full,
+                            ),
+                            child: Text(
+                              '${provider.results.length} games',
+                              style: context.textTheme.labelSmall?.copyWith(
+                                color: context.colors.onPrimaryContainer,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ).animate().fadeIn(
                       delay: const Duration(milliseconds: 150),
                       duration: AppDurations.normal,
                     ),
@@ -155,23 +157,19 @@ class _ProfileTabState extends State<ProfileTab> {
                 padding: EdgeInsets.all(AppSpacing.pagePadding),
                 sliver: SliverList.separated(
                   itemCount: 5,
-                  separatorBuilder: (_, _) =>
-                      SizedBox(height: AppSpacing.sm),
+                  separatorBuilder: (_, _) => SizedBox(height: AppSpacing.sm),
                   itemBuilder: (_, _) => Skeletonizer(
                     enabled: true,
-                    child: _ResultCard(
-                      result: _dummyResult,
-                      index: 0,
-                    ),
+                    child: _ResultCard(result: _dummyResult, index: 0),
                   ),
                 ),
               )
             else if (provider.results.isEmpty)
               SliverFillRemaining(
                 hasScrollBody: false,
-                child: _EmptyHistory()
-                    .animate()
-                    .fadeIn(duration: AppDurations.normal),
+                child: _EmptyHistory().animate().fadeIn(
+                  duration: AppDurations.normal,
+                ),
               )
             else
               SliverPadding(
@@ -180,12 +178,12 @@ class _ProfileTabState extends State<ProfileTab> {
                 ),
                 sliver: SliverList.separated(
                   itemCount: provider.results.length,
-                  separatorBuilder: (_, _) =>
-                      SizedBox(height: AppSpacing.sm),
-                  itemBuilder: (context, index) => _ResultCard(
-                    result: provider.results[index],
-                    index: index,
-                  ).animate().fadeIn(
+                  separatorBuilder: (_, _) => SizedBox(height: AppSpacing.sm),
+                  itemBuilder: (context, index) =>
+                      _ResultCard(
+                        result: provider.results[index],
+                        index: index,
+                      ).animate().fadeIn(
                         delay: Duration(milliseconds: index.clamp(0, 5) * 60),
                         duration: AppDurations.normal,
                       ),
@@ -200,8 +198,9 @@ class _ProfileTabState extends State<ProfileTab> {
                   child: provider.hasMore
                       ? _LoadMoreButton(
                           isLoading: provider.isLoading,
-                          onTap: () =>
-                              context.read<ResultHistoryProvider>().loadNextPage(),
+                          onTap: () => context
+                              .read<ResultHistoryProvider>()
+                              .loadNextPage(),
                         )
                       : Center(
                           child: Text(
@@ -253,14 +252,14 @@ class _ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Aggregate stats from loaded results.
-    final totalScore =
-        results.fold<int>(0, (sum, r) => sum + r.score);
-    final bestScore =
-        results.isEmpty ? 0 : results.map((r) => r.score).reduce((a, b) => a > b ? a : b);
+    final totalScore = results.fold<int>(0, (sum, r) => sum + r.score);
+    final bestScore = results.isEmpty
+        ? 0
+        : results.map((r) => r.score).reduce((a, b) => a > b ? a : b);
     final avgAccuracy = results.isEmpty
         ? 0.0
         : results.fold<double>(0, (sum, r) => sum + r.accuracy) /
-            results.length;
+              results.length;
 
     return Container(
       width: double.infinity,
@@ -279,10 +278,7 @@ class _ProfileHeader extends StatelessWidget {
                     context.colors.secondary,
                   ),
                 ]
-              : [
-                  context.colors.primary,
-                  context.colors.secondary,
-                ],
+              : [context.colors.primary, context.colors.secondary],
         ),
       ),
       child: SafeArea(
@@ -291,7 +287,7 @@ class _ProfileHeader extends StatelessWidget {
           padding: EdgeInsets.all(AppSpacing.pagePadding),
           child: Column(
             children: [
-              // Avatar + name
+              // Avatar + name + Logout icon
               Row(
                 children: [
                   _Avatar(photoUrl: photoUrl, name: name),
@@ -319,6 +315,17 @@ class _ProfileHeader extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
+                    ),
+                  ),
+                  Align(
+                    alignment: .centerLeft,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.logout_rounded,
+                        color: context.colors.error,
+                      ),
+                      onPressed: () =>
+                          context.read<AuthProvider>().logout(context: context),
                     ),
                   ),
                 ],
@@ -530,11 +537,7 @@ class _ResultCard extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      Icons.bolt_rounded,
-                      color: Colors.white,
-                      size: 12.r,
-                    ),
+                    Icon(Icons.bolt_rounded, color: Colors.white, size: 12.r),
                     SizedBox(width: 2.r),
                     Text(
                       '${result.score} pts',
@@ -614,7 +617,9 @@ class _ResultCard extends StatelessWidget {
                   borderRadius: AppBorders.xs,
                 ),
                 child: Text(
-                  result.questionType == 'boolean' ? 'T/F' : result.questionType.toUpperCase(),
+                  result.questionType == 'boolean'
+                      ? 'T/F'
+                      : result.questionType.toUpperCase(),
                   style: context.textTheme.labelSmall?.copyWith(
                     color: context.colors.onSurfaceVariant,
                     fontSize: 9.sp,
@@ -651,10 +656,7 @@ class _StatBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSpacing.xs,
-        vertical: 2.r,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: 2.r),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: AppBorders.xs,
