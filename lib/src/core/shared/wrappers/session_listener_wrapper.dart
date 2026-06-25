@@ -23,7 +23,6 @@ class _SessionListenerWrapperState extends State<SessionListenerWrapper> {
         } else if (session.status == SessionStatus.unauthenticated) {
           appRouter.go(AppRoutes.login);
         }
-        FlutterNativeSplash.remove();
       });
     }
   }

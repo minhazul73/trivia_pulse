@@ -71,7 +71,6 @@ dependencies:
   app_version_update: ^7.0.0
 
 
-  flutter_native_splash: ^2.4.7
   flutter_launcher_icons: ^0.14.4
   html_unescape: ^2.0.0
 
