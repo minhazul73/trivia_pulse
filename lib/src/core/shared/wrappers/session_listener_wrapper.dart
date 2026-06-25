@@ -1,7 +1,6 @@
+import '../../../ui/auth/providers/session_provider.dart';
 import '../../imports/core_imports.dart';
 import '../../imports/packages_imports.dart';
-
-import '../../../ui/auth/providers/session_provider.dart';
 
 class SessionListenerWrapper extends StatefulWidget {
   final Widget child;
@@ -19,12 +18,12 @@ class _SessionListenerWrapperState extends State<SessionListenerWrapper> {
     if (session.status != SessionStatus.unknown) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-        FlutterNativeSplash.remove();
         if (session.status == SessionStatus.authenticated) {
           appRouter.go(AppRoutes.bottomNav);
         } else if (session.status == SessionStatus.unauthenticated) {
-          appRouter.go(AppRoutes.onboarding);
+          appRouter.go(AppRoutes.login);
         }
+        FlutterNativeSplash.remove();
       });
     }
   }

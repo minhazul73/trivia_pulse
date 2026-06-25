@@ -16,7 +16,7 @@ import '../../ui/onboarding/onboarding_page.dart';
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: AppRoutes.onboarding,
+  initialLocation: AppRoutes.login,
   routes: <RouteBase>[
     GoRoute(
       path: AppRoutes.onboarding,
