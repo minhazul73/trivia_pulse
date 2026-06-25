@@ -319,13 +319,21 @@ class _ProfileHeader extends StatelessWidget {
                   ),
                   Align(
                     alignment: .centerLeft,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.logout_rounded,
-                        color: context.colors.error,
+                    child: Container(
+                      padding: EdgeInsets.all(AppSpacing.xs),
+                      decoration: BoxDecoration(
+                        color: context.colors.error.withValues(alpha: 0.2),
+                        borderRadius: AppBorders.md,
                       ),
-                      onPressed: () =>
-                          context.read<AuthProvider>().logout(context: context),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.logout_rounded,
+                          color: context.colors.error,
+                        ),
+                        onPressed: () => context.read<AuthProvider>().logout(
+                          context: context,
+                        ),
+                      ),
                     ),
                   ),
                 ],
