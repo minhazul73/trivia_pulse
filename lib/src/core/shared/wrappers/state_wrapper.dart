@@ -4,7 +4,7 @@ import '../../../data/repositories/quiz/quiz_repository_impl.dart';
 import '../../../data/repositories/result/result_repository_impl.dart';
 import '../../../ui/auth/providers/auth_provider.dart';
 import '../../../ui/auth/providers/session_provider.dart';
-import '../../../ui/home/provider/quiz_provider.dart';
+import '../../../ui/quiz/provider/quiz_provider.dart';
 import '../../../ui/leaderboard/provider/leaderboard_provider.dart';
 import '../../../ui/profile/provider/result_history_provider.dart';
 import '../../imports/imports.dart';

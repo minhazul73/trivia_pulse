@@ -3,7 +3,7 @@ export 'package:flutter/material.dart';
 export 'package:flutter/cupertino.dart' hide RefreshCallback;
 export 'package:flutter/foundation.dart';
 export 'package:flutter/services.dart';
-export 'package:flutter_native_splash/flutter_native_splash.dart';
+
 
 
 // Project Core — everything exported through shared.dart (theme, extensions,
@@ -19,3 +19,4 @@ export '../../ui/auth/login_screen.dart';
 export '../../ui/auth/signup_screen.dart';
 export '../../ui/auth/forgot_password_screen.dart';
 export '../../ui/bottom_nav/bottom_nav_page.dart';
+export '../../ui/splash/splash_screen.dart';

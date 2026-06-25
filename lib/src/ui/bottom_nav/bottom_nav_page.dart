@@ -1,7 +1,7 @@
 import '../../core/imports/imports.dart';
 
 import '../home/home_tab.dart';
-import '../home/provider/quiz_provider.dart';
+import '../quiz/provider/quiz_provider.dart';
 import '../leaderboard/leaderboard_tab.dart';
 import '../profile/profile_tab.dart';
 

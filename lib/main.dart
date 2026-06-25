@@ -3,8 +3,7 @@ import 'src/core/imports/core_imports.dart';
 import 'src/core/imports/packages_imports.dart';
 
 Future<void> main() async {
-  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  WidgetsFlutterBinding.ensureInitialized();
   
   await dotenv.load(fileName: '.env');
   

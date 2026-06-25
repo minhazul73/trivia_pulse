@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import '../../core/imports/imports.dart';
 import '../../data/models/question_model.dart';
-import '../home/provider/quiz_provider.dart';
+import 'provider/quiz_provider.dart';
 
 // ── Answer option letter labels ───────────────────────────────────────────────
 const _optionLabels = ['A', 'B', 'C', 'D'];

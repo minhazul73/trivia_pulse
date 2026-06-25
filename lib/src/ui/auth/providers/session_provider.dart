@@ -16,16 +16,40 @@ class SessionProvider extends ChangeNotifier {
   AppUser? get user => _user;
   bool get isAuthenticated => _status == SessionStatus.authenticated;
 
-  SessionProvider({required AuthRepository repository}) : _repository = repository {
+  /// True between auth resolution and the splash exit animation completing.
+  /// GoRouter's redirect returns null while this is true, giving the splash
+  /// time to animate out before the router fires.
+  bool _navigationPending = false;
+  bool get navigationPending => _navigationPending;
+
+  /// Called by [SplashScreen] after its exit animation finishes.
+  /// Clears the pending flag and re-triggers GoRouter's redirect.
+  void confirmNavigation() {
+    _navigationPending = false;
+    notifyListeners();
+  }
+
+  SessionProvider({required AuthRepository repository})
+    : _repository = repository {
     _init();
   }
 
   Future<void> _init() async {
-    final result = await _repository.checkAuthState();
+    // Run auth check and minimum splash timer concurrently.
+    // notifyListeners() is only called after both complete, so GoRouter's
+    // redirect (and the splash → home/login transition) never fires in under
+    // 2.5 s — regardless of how fast Firebase responds from cache.
+    final authFuture = _repository.checkAuthState();
+    final timerFuture = Future<void>.delayed(
+      const Duration(milliseconds: 2500),
+    );
+
+    final result = await authFuture;
+    await timerFuture; // no-op if auth took longer; waits out the rest if it was fast
+
     result.fold(
       (_) {
         _status = SessionStatus.unauthenticated;
-        notifyListeners();
       },
       (user) {
         if (user != null) {
@@ -34,9 +58,12 @@ class SessionProvider extends ChangeNotifier {
         } else {
           _status = SessionStatus.unauthenticated;
         }
-        notifyListeners();
       },
     );
+    // Signal splash to begin its exit animation; redirect is blocked until
+    // SplashScreen calls confirmNavigation() after the animation completes.
+    _navigationPending = true;
+    notifyListeners();
 
     _authSub = _repository.onAuthStateChanged.listen((user) {
       if (user != null) {
@@ -63,4 +90,3 @@ class SessionProvider extends ChangeNotifier {
     super.dispose();
   }
 }
-

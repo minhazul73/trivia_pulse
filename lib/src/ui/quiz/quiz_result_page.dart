@@ -3,7 +3,7 @@ import '../../core/imports/imports.dart';
 import '../../data/models/result_model.dart';
 import '../../ui/auth/providers/session_provider.dart';
 import '../../ui/profile/provider/result_history_provider.dart';
-import '../home/provider/quiz_provider.dart';
+import 'provider/quiz_provider.dart';
 
 class QuizResultPage extends StatefulWidget {
   final ResultModel result;

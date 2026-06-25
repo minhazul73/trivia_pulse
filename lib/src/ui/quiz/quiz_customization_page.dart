@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import '../../core/imports/imports.dart';
 import '../../data/models/category_model.dart';
 import '../../data/models/question_model.dart';
-import '../home/provider/quiz_provider.dart';
+import 'provider/quiz_provider.dart';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

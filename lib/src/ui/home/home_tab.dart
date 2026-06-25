@@ -1,5 +1,5 @@
 import '../../core/imports/imports.dart';
-import 'provider/quiz_provider.dart';
+import '../quiz/provider/quiz_provider.dart';
 
 /// Maps category names to fitting icons for visual richness.
 IconData _iconForCategory(String name) {
